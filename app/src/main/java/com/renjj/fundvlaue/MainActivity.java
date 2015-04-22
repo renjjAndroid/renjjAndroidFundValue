@@ -260,7 +260,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     Toast.makeText(MainActivity.this, "数据获取失败", Toast.LENGTH_SHORT).show();  
                 }else {  
                 	if(data.size()>0){
-                      double total=0;
+                      double totalprice=0;
                 	  String [] res = new String[data.size()];                	  
                 	  SimpleDateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
                 	  // ad资源
@@ -293,7 +293,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
                           BigDecimal b = new BigDecimal(nowprice-price);
                           price = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                          total +=price;
+                          totalprice +=price;
                 		  Map<String, Object> newMap = new HashMap<String, Object>(){};
                 		  newMap.put("fundname", map.get("title").toString());
                 		  newMap.put("fundtopinfo", "净值:"+map.get("valueStr").toString()+" 目前市值:"+nowprice+" 收益:"+price);
@@ -312,7 +312,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 	  ad= new SimpleAdapter(MainActivity.this,resMap,R.layout.fundvalue_listitem,from,to);
                 	  lstview.setAdapter(ad);
                       //总收益
-                      total.setText(String.valueOf(total));
+                      total.setText(String.valueOf(totalprice));
                 	}
                 }  
             }  
