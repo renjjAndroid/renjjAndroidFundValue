@@ -38,13 +38,14 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 	//control
-	//TextView txt = null;
+	TextView total = null;
 	EditText addfundvalue = null;
 	//Button send = null;
 	Button add = null;
@@ -102,6 +103,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		lstview = (ListView)findViewById(R.id.listview);
 		buyvalue = (EditText)findViewById(R.id.buyvalue);
 		buyunit = (EditText)findViewById(R.id.buyunit);
+        total= (TextView)findViewById(R.id.buyunit);
 	}
 		
 	private void Task() {	
@@ -194,7 +196,6 @@ public class MainActivity extends Activity implements OnClickListener {
             		   }
             	  }
               }
-              
               if(DayDayFundBuyMap.containsKey(id+"buyVal")){
             	  map.put("fundBuyVal",DayDayFundBuyMap.get(id+"buyVal")); 
 			   }
@@ -259,6 +260,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     Toast.makeText(MainActivity.this, "数据获取失败", Toast.LENGTH_SHORT).show();  
                 }else {  
                 	if(data.size()>0){
+                      double total=0;
                 	  String [] res = new String[data.size()];                	  
                 	  SimpleDateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
                 	  // ad资源
@@ -268,7 +270,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 		  String str = map.get("title").toString()+map.get("value").toString();
                 		  str+= " 购买净值:"+map.get("fundBuyVal").toString()+" "+"购买数额:"+map.get("fundUnitVal").toString()+" "+df.format(new Date());
                 		  res[i] = str;
-
                           //现在的计算
                           double value= Double.valueOf(map.get("value").toString());
                           double nowprice=0;
@@ -292,7 +293,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
                           BigDecimal b = new BigDecimal(nowprice-price);
                           price = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-
+                          total +=price;
                 		  Map<String, Object> newMap = new HashMap<String, Object>(){};
                 		  newMap.put("fundname", map.get("title").toString());
                 		  newMap.put("fundtopinfo", "净值:"+map.get("valueStr").toString()+" 目前市值:"+nowprice+" 收益:"+price);
@@ -310,6 +311,8 @@ public class MainActivity extends Activity implements OnClickListener {
                 	  
                 	  ad= new SimpleAdapter(MainActivity.this,resMap,R.layout.fundvalue_listitem,from,to);
                 	  lstview.setAdapter(ad);
+                      //总收益
+                      total.setText(String.valueOf(total));
                 	}
                 }  
             }  
